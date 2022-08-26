@@ -25,6 +25,8 @@
 		521C9748235D922A00C33B59 /* ContainerContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521C9747235D922A00C33B59 /* ContainerContext.swift */; };
 		521C974A235D934000C33B59 /* DependencyContainer+Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521C9749235D934000C33B59 /* DependencyContainer+Context.swift */; };
 		52914F00235C85270084611C /* DIKit+Inject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52914EFF235C85270084611C /* DIKit+Inject.swift */; };
+		9804393828B90F650033F2D8 /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9804393628B90F650033F2D8 /* UnfairLock.swift */; };
+		9804393928B90F650033F2D8 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9804393728B90F650033F2D8 /* Atomic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		521C9747235D922A00C33B59 /* ContainerContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerContext.swift; sourceTree = "<group>"; };
 		521C9749235D934000C33B59 /* DependencyContainer+Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DependencyContainer+Context.swift"; sourceTree = "<group>"; };
 		52914EFF235C85270084611C /* DIKit+Inject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIKit+Inject.swift"; sourceTree = "<group>"; };
+		9804393628B90F650033F2D8 /* UnfairLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
+		9804393728B90F650033F2D8 /* Atomic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +139,7 @@
 				4B5D4A4020221E54008D76FB /* Component */,
 				4BBD038A2023349C00D9E468 /* Container */,
 				4BBD03932023353B00D9E468 /* Resources */,
+				9804393528B90F650033F2D8 /* Utilities */,
 				4BC7ED852126C19A0033BE1D /* DIKit.swift */,
 				52914EFF235C85270084611C /* DIKit+Inject.swift */,
 				31DD07E9893668F62429F016 /* DIKitDSL.swift */,
@@ -153,6 +158,15 @@
 				4BD95DF12008B3CF009CE38D /* Info.plist */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		9804393528B90F650033F2D8 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				9804393628B90F650033F2D8 /* UnfairLock.swift */,
+				9804393728B90F650033F2D8 /* Atomic.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -313,11 +327,13 @@
 				521C974A235D934000C33B59 /* DependencyContainer+Context.swift in Sources */,
 				52914F00235C85270084611C /* DIKit+Inject.swift in Sources */,
 				4BBD038C202334B100D9E468 /* DependencyContainer+Register.swift in Sources */,
+				9804393928B90F650033F2D8 /* Atomic.swift in Sources */,
 				4B5D4A37202217CA008D76FB /* DependencyContainer.swift in Sources */,
 				4B5D4A3F20221E2C008D76FB /* Component.swift in Sources */,
 				4B5D4A35202203C3008D76FB /* Lifetime.swift in Sources */,
 				4B13FBFF2126B07C00299034 /* DefinesContainer.swift in Sources */,
 				521C9748235D922A00C33B59 /* ContainerContext.swift in Sources */,
+				9804393828B90F650033F2D8 /* UnfairLock.swift in Sources */,
 				4BBD038E202334C200D9E468 /* DependencyContainer+Resolve.swift in Sources */,
 				31DD030F33AA0C4A8D3A3615 /* DIKitDSL.swift in Sources */,
 			);
@@ -478,7 +494,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.benjohnde.DIKit;
@@ -503,7 +519,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Resources/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.benjohnde.DIKit;

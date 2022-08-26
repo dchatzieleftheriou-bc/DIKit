@@ -1,8 +1,12 @@
-// swift-tools-version:5.4
+// swift-tools-version: 5.6
 import PackageDescription
 
 let package = Package(
     name: "DIKit",
+    platforms: [
+        .iOS(.v12),
+        .macOS(.v11)
+    ],
     products: [
         .library(
             name: "DIKit",
