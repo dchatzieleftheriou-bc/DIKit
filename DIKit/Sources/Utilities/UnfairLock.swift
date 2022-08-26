@@ -2,11 +2,11 @@
 
 import Foundation
 
-public final class UnfairLock {
+final class UnfairLock {
 
     @usableFromInline let lock: UnsafeMutablePointer<os_unfair_lock>
 
-    public init() {
+    init() {
         lock = .allocate(capacity: 1)
         lock.initialize(to: os_unfair_lock())
     }
@@ -17,7 +17,7 @@ public final class UnfairLock {
 
     @inlinable
     @inline(__always)
-    public func withLock<Result>(body: () throws -> Result) rethrows -> Result {
+    func withLock<Result>(body: () throws -> Result) rethrows -> Result {
         os_unfair_lock_lock(lock)
         defer { os_unfair_lock_unlock(lock) }
         return try body()
@@ -25,7 +25,7 @@ public final class UnfairLock {
 
     @inlinable
     @inline(__always)
-    public func withLock(body: () -> Void) {
+    func withLock(body: () -> Void) {
         os_unfair_lock_lock(lock)
         defer { os_unfair_lock_unlock(lock) }
         body()
@@ -33,13 +33,13 @@ public final class UnfairLock {
 
     @inlinable
     @inline(__always)
-    public func assertOwner() {
+    func assertOwner() {
         os_unfair_lock_assert_owner(lock)
     }
 
     @inlinable
     @inline(__always)
-    public func assertNotOwner() {
+    func assertNotOwner() {
         os_unfair_lock_assert_not_owner(lock)
     }
 }

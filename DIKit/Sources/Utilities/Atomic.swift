@@ -3,12 +3,12 @@
 import Foundation
 
 /// A wrapper for atomic access to a generic value.
-public final class Atomic<Value> {
+final class Atomic<Value> {
 
     private let lock = UnfairLock()
 
     /// Atomic read access to the wrapped value.
-    public var value: Value {
+    var value: Value {
         lock.withLock { _value }
     }
 
@@ -20,7 +20,7 @@ public final class Atomic<Value> {
     /// Creates an atomic wrapper.
     ///
     /// - Parameter value: A value.
-    public init(_ value: Value) {
+    init(_ value: Value) {
         _value = value
     }
 
@@ -36,7 +36,7 @@ public final class Atomic<Value> {
     ///
     /// - Returns: The updated wrapped value.
     @discardableResult
-    public func mutate(_ transform: (_ current: inout Value) -> Void) -> Value {
+    func mutate(_ transform: (_ current: inout Value) -> Void) -> Value {
         lock.withLock { () -> Value in
             transform(&_value)
             return _value
@@ -52,7 +52,7 @@ public final class Atomic<Value> {
     ///   - current:   The current wrapped value, passed as an `inout` parameter to allow mutation.
     ///
     /// - Returns: The return value of the `transform` closure.
-    public func mutateAndReturn<T>(_ transform: (_ current: inout Value) -> T) -> T {
+    func mutateAndReturn<T>(_ transform: (_ current: inout Value) -> T) -> T {
         lock.withLock { transform(&_value) }
     }
 }
