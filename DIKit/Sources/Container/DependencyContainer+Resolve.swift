@@ -13,21 +13,23 @@ extension DependencyContainer {
     /// - Parameter tag: An optional *tag* to identify the Component. `nil` per default.
     /// - Returns: The resolved `Optional<Component<T>>`.
     func _resolve<T>(tag: AnyHashable? = nil) -> T? {
-        let identifier = ComponentIdentifier(tag: tag, type: T.self)
-        guard let foundComponent = self.componentStack.value[identifier] else {
-            return nil
+        return withLock {
+            let identifier = ComponentIdentifier(tag: tag, type: T.self)
+            guard let foundComponent = self.componentStack[identifier] else {
+                return nil
+            }
+            switch foundComponent.lifetime {
+            case .factory:
+                return foundComponent.componentFactory() as? T
+            case .singleton:
+                if let instanceOfComponent = instanceStack[identifier] as? T {
+                    return instanceOfComponent
+                }
+                let instance: T = foundComponent.componentFactory() as! T
+                instanceStack[identifier] = instance
+                return instance
+            }
         }
-        if foundComponent.lifetime == .factory {
-            return foundComponent.componentFactory() as? T
-        }
-        if let instanceOfComponent = self.instanceStack.value[identifier] as? T {
-            return instanceOfComponent
-        }
-        let instance = foundComponent.componentFactory() as! T
-        self.instanceStack.mutate { stack in
-            stack[identifier] = instance
-        }
-        return instance
     }
 
     /// Checks whether `Component<T>` is resolvable by looking it up in the
@@ -40,7 +42,7 @@ extension DependencyContainer {
     /// - Returns: `Bool` whether `Component<T>` is resolvable or not.
     func resolvable<T>(type: T.Type, tag: AnyHashable? = nil) -> Bool {
         let identifier = ComponentIdentifier(tag: tag, type: T.self)
-        return self.componentStack.value[identifier] != nil
+        return withLock { self.componentStack[identifier] != nil }
     }
 
     /// Resolves a `Component<T>`.
