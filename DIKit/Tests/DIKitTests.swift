@@ -30,30 +30,30 @@ class DIKitTests: XCTestCase {
         }
 
         let componentAIdentifier = ComponentIdentifier(type: ComponentA.self)
-        guard let componentA = dependencyContainer.componentStack.value.index(forKey: componentAIdentifier) else {
+        guard let componentA = dependencyContainer.componentStack.index(forKey: componentAIdentifier) else {
             return XCTFail("ComponentStack does not contain `ComponentA`.")
         }
-        let componentProtocolA = dependencyContainer.componentStack.value[componentA].value
+        let componentProtocolA = dependencyContainer.componentStack[componentA].value
         XCTAssertEqual(componentProtocolA.lifetime, .singleton)
         let instanceA = componentProtocolA.componentFactory()
         XCTAssertTrue(instanceA is ComponentA)
         XCTAssertFalse(instanceA is ComponentB)
 
         let componentBIdentifier = ComponentIdentifier(type: ComponentB.self)
-        guard let componentB = dependencyContainer.componentStack.value.index(forKey: componentBIdentifier) else {
+        guard let componentB = dependencyContainer.componentStack.index(forKey: componentBIdentifier) else {
             return XCTFail("ComponentStack does not contain `ComponentB`.")
         }
-        let componentProtocolB = dependencyContainer.componentStack.value[componentB].value
+        let componentProtocolB = dependencyContainer.componentStack[componentB].value
         XCTAssertEqual(componentProtocolB.lifetime, .singleton)
         let instanceB = componentProtocolB.componentFactory()
         XCTAssertTrue(instanceB is ComponentB)
         XCTAssertFalse(instanceB is ComponentA)
 
         let taggedComponentBIdentifier = ComponentIdentifier(tag: "tag", type: ComponentB.self)
-        guard let taggedComponentB = dependencyContainer.componentStack.value.index(forKey: taggedComponentBIdentifier) else {
+        guard let taggedComponentB = dependencyContainer.componentStack.index(forKey: taggedComponentBIdentifier) else {
             return XCTFail("ComponentStack does not contain `ComponentB`.")
         }
-        let taggedComponentProtocolB = dependencyContainer.componentStack.value[taggedComponentB].value
+        let taggedComponentProtocolB = dependencyContainer.componentStack[taggedComponentB].value
         XCTAssertEqual(taggedComponentProtocolB.lifetime, .singleton)
         let taggedInstanceB = taggedComponentProtocolB.componentFactory()
         XCTAssertTrue(taggedInstanceB is ComponentB)
@@ -233,13 +233,13 @@ class DIKitTests: XCTestCase {
         XCTAssertFalse(TestStateHolder.isInitialized(ComponentF.self))
 
         XCTAssertNotEqual(
-                ObjectIdentifier(test1VC.componentE!),
-                ObjectIdentifier(test2VC.componentE!)
+            ObjectIdentifier(test1VC.componentE!),
+            ObjectIdentifier(test2VC.componentE!)
         )
 
         XCTAssertEqual(
-                ObjectIdentifier(test1VC.componentF!),
-                ObjectIdentifier(test2VC.componentF!)
+            ObjectIdentifier(test1VC.componentF!),
+            ObjectIdentifier(test2VC.componentF!)
         )
     }
 
@@ -351,13 +351,13 @@ class DIKitTests: XCTestCase {
         XCTAssertTrue(TestStateHolder.isInitialized(ComponentD.self))
 
         XCTAssertNotEqual(
-                ObjectIdentifier(test1VC.componentD),
-                ObjectIdentifier(test2VC.componentD)
+            ObjectIdentifier(test1VC.componentD),
+            ObjectIdentifier(test2VC.componentD)
         )
 
         XCTAssertEqual(
-                ObjectIdentifier(test1VC.componentC),
-                ObjectIdentifier(test2VC.componentC)
+            ObjectIdentifier(test1VC.componentC),
+            ObjectIdentifier(test2VC.componentC)
         )
     }
 

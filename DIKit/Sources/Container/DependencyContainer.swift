@@ -18,8 +18,8 @@ public final class DependencyContainer {
 
     // MARK: - Properties
     internal var bootstrapped = false
-    internal var componentStack = Atomic(ComponentStack())
-    internal var instanceStack = Atomic(InstanceStack())
+    internal var componentStack = ComponentStack()
+    internal var instanceStack = InstanceStack()
     private let lock = NSRecursiveLock()
 
     internal static var root: DependencyContainer?
@@ -39,7 +39,7 @@ public final class DependencyContainer {
     /// - Returns: The final `DependencyContainer`.
     public static func derive(from containers: DependencyContainer...) -> DependencyContainer {
         return DependencyContainer(containers.reduce(into: ComponentStack()) { (result, container) in
-            result.merge(container.componentStack.value) { (old, new) -> ComponentProtocol in
+            result.merge(container.componentStack) { (old, new) -> ComponentProtocol in
                 fatalError("A `Component` was declared at least twice `\(old)` -> `\(new)`.")
             }
         })
@@ -53,7 +53,7 @@ public final class DependencyContainer {
     /// - Returns: The final `DependencyContainer`.
     public static func derive(from containers: [DependencyContainer]) -> DependencyContainer {
         return DependencyContainer(containers.reduce(into: ComponentStack()) { (result, container) in
-            result.merge(container.componentStack.value) { (old, new) -> ComponentProtocol in
+            result.merge(container.componentStack) { (old, new) -> ComponentProtocol in
                 fatalError("A `Component` was declared at least twice `\(old)` -> `\(new)`.")
             }
         })
@@ -65,7 +65,7 @@ public final class DependencyContainer {
     ///     - boostrapBlock: The *boostrapBlock* is a closure `(DependencyContainer)
     ///                       -> Void` for registering all `[Component]`.
     public init(boostrapBlock: BootstrapBlock) {
-        threadSafe {
+        withLock {
             boostrapBlock(self)
             self.bootstrapped = true
         }
@@ -73,11 +73,12 @@ public final class DependencyContainer {
 
     // MARK: - Internal methods
     init(_ componentStack: ComponentStack) {
-        self.componentStack = Atomic(componentStack)
+        self.componentStack = componentStack
         self.bootstrapped = true
     }
 
-    func threadSafe(_ closure: () -> ()) {
+    @discardableResult
+    func withLock<Return>(_ closure: () -> Return) -> Return {
         lock.lock()
         defer {
             lock.unlock()
@@ -85,3 +86,4 @@ public final class DependencyContainer {
         return closure()
     }
 }
+
